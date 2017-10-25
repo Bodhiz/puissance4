@@ -1,0 +1,35 @@
+{
+  "name": "puissance4",
+  "homepage": "https://github.com/Bodhiz/puissance4",
+  "authors": [
+    "Jonathan Adeline <jadeline@doubletrade.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "^2.2.0",
+    "paper-styles": "PolymerElements/paper-styles#^2.0.0",
+    "app-route": "PolymerElements/app-route#^2.0.3",
+    "iron-pages": "polymerelements/iron-pages#^2.0.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.0",
+    "polymerfire": "firebase/polymerfire#^2.2.1",
+    "paper-button": "PolymerElements/paper-button#^2.0.0",
+    "iron-list": "PolymerElements/iron-list#^2.0.11",
+    "paper-item": "PolymerElements/paper-item#^2.0.0",
+    "paper-icon-button": "polymerElements/paper-icon-button#^2.0.1",
+    "iron-icons": "PolymerElements/iron-icons#^2.0.1",
+    "paper-dialog": "Bodhiz/paper-dialog#^2.0.0",
+    "paper-progress": "PolymerElements/paper-progress#^2.0.1",
+    "paper-input": "PolymerElements/paper-input#^2.0.2",
+    "iron-collapse": "PolymerElements/iron-collapse#^2.0.0"
+  }
+}

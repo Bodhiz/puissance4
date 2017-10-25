@@ -1,0 +1,85 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+<dom-module id="p4-board">
+    <template>
+        <style include="iron-flex iron-flex-alignment">
+            :host {
+                display: inline-block;
+
+            }
+
+            :host(.disabled) .container {
+                opacity: 0.4;
+            }
+
+            :host .container {
+                background: var(--paper-blue-900);
+                border-radius: 5px;
+                padding-bottom: 20px;
+                position: relative;
+            }
+
+            .col {
+                padding: 5px;
+            }
+
+            :host .col:hover {
+                background: var(--paper-blue-200);
+                cursor: pointer;
+            }
+
+            :host(.disabled) .col:hover {
+                background: none;
+                cursor: auto;
+            }
+
+            .coinSpot {
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                background: #fff;
+                margin: 5px;
+            }
+
+            .foot {
+                background: var(--paper-blue-900);
+                width: 30px;
+                height: 50px;
+                position: absolute;
+                bottom: -45px;
+            }
+
+            .foot.left {
+                left: 0;
+            }
+
+            .foot.right {
+                right: 0;
+            }
+
+            .coinSpot.p1 {
+                background: var(--p4-board-player1-color, var(--paper-green-600));
+            }
+
+            .coinSpot.p2 {
+                background: var(--p4-board-player2-color, var(--paper-pink-900));
+            }
+        </style>
+        <div class="container layout horizontal">
+            <template is="dom-repeat" items="[[board]]" as="col" index-as="colIndex">
+                <div class="col layout vertical" on-tap="_dropCoin">
+                    <template is="dom-repeat" items="[[col]]" as="playerId" index-as="rowIndex">
+                        <div class$="coinSpot [[_computeCoinColor(playerId)]]">
+                        </div>
+                    </template>
+                </div>
+            </template>
+            <div class="foot left"></div>
+            <div class="foot right"></div>
+        </div>
+
+    </template>
+    <script src="p4-board.js"></script>
+</dom-module>

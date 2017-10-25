@@ -1,0 +1,132 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/iron-icons/hardware-icons.html">
+
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+
+
+<dom-module id="p4-start-page">
+    <template>
+        <style include="iron-flex iron-flex-alignment">
+            :host {
+                @apply --layout-vertical;
+                @apply --layout-center;
+            }
+
+            paper-button {
+                background: var(--paper-amber-500);
+                color: #fff;
+                font-weight: bold;
+            }
+
+            paper-button[disabled] {
+                background-color: transparent;
+                color: var(--paper-red-500);
+            }
+
+            .list {
+                margin: 30px 0;
+                width: 400px;
+                border: 1px solid var(--paper-grey-300);
+                border-radius: 5px;
+                background: var(--paper-grey-100);
+            }
+
+            iron-list {
+                height: 250px;
+            }
+
+            iron-list iron-icon {
+                height: 40px;
+                width: 40px;
+                color: var(--paper-red-500);
+            }
+
+
+            iron-collapse {
+                width: 300px;
+                --iron-collapse-transition-duration: 0;
+            }
+
+            iron-collapse paper-button {
+                width: 30px;
+            }
+
+            iron-collapse paper-input {
+                margin: 0 10px 0 0;
+            }
+
+            iron-icon {
+                width: 15px;
+                height: 15px;
+            }
+
+            paper-input {
+                --paper-input-container-focus-color: var(--paper-amber-500);
+                --paper-input-container: {
+                    padding-bottom: 0;
+                }
+            }
+
+            paper-input paper-icon-button {
+                padding: 0 5px;
+                height: 30px;
+                width: 30px;
+                color: var(--paper-grey-500);
+            }
+
+            paper-tooltip iron-icon {
+                margin-right: 5px;
+            }
+        </style>
+
+
+        <firebase-query id="query" path="/gameRooms" data="{{_gameRooms}}">
+        </firebase-query>
+
+        <paper-button id="startBtn" on-tap="_toggleCollapse">START A NEW GAME</paper-button>
+        <iron-collapse id="collapse" opened="{{_isCollapseOpened}}">
+            <div class="layout horizontal">
+                <paper-input id="input" class="flex" no-label-float label="Name your game..." value="{{_gameRoomName}}" on-keyup="_handleInputKeyUp">
+                    <paper-icon-button slot="suffix" icon="clear" on-tap="_toggleCollapse"></paper-icon-button>
+                </paper-input>
+                <paper-button on-tap="_handleOkBtn">OK</paper-button>
+            </div>
+        </iron-collapse>
+
+        <template is="dom-if" if="[[_hasGameRooms(_gameRooms.*)]]">
+            <div class="list">
+                <iron-list items="[[_gameRooms]]" as="gameRoom">
+                    <template>
+                        <paper-icon-item>
+                            <iron-icon icon="hardware:videogame-asset" slot="item-icon"></iron-icon>
+                            <paper-item-body two-line>
+                                <div>[[gameRoom.name]]</div>
+                            </paper-item-body>
+                            <template is="dom-if" if="[[_hasFreeSpot(gameRoom.players)]]">
+                                <paper-button on-tap="_joinGameRoom">JOIN</paper-button>
+                            </template>
+                            <template is="dom-if" if="[[!_hasFreeSpot(gameRoom.players)]]">
+                                <paper-button disabled>FULL</paper-button>
+                            </template>
+                        </paper-icon-item>
+                    </template>
+                </iron-list>
+            </div>
+        </template>
+
+    </template>
+    <script src="p4-start-page.js"></script>
+</dom-module>

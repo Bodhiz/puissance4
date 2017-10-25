@@ -1,0 +1,60 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+
+<link rel="import" href="pages/p4-start-page.html">
+
+<dom-module id="p4-app">
+
+  <template>
+
+    <style include="iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+        height: 100vh;
+      }
+
+      .container {
+        height: 100%;
+        transform: translateY(-10%);
+      }
+
+      #logo {
+        margin: 0 0 30px 0;
+      }
+    </style>
+
+    <!-- app-location and app-route elements provide the state of the URL for the app. -->
+
+    <app-location route="{{route}}"></app-location>
+    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+
+
+    <!-- Setup firebase -->
+    <firebase-app auth-domain="puissance4-f2d07.firebaseapp.com" database-url="https://puissance4-f2d07.firebaseio.com" api-key="AIzaSyB9l1U88wfOk3hbV75TlGUHlLRLBGN8Xcc">
+    </firebase-app>
+    <firebase-auth id="auth"></firebase-auth>
+
+
+    <div class="container horizontal layout center-justified">
+      <div class="vertical layout center center-justified">
+        <img id="logo" src="images/p4-logo.jpg" width="300">
+        <iron-pages role="main" selected="[[page]]" attr-for-selected="name" selected-attribute="visible" fallback-selection="404">
+          <!-- Splash Screen -->
+          <p4-start-page name="start" player="{{player}}" route="{{route}}"></p4-start-page>
+          <!-- P4 Board -->
+          <p4-gameroom-page name="gameroom" player="[[player]]" subroute="{{subroute}}"></p4-gameroom-page>
+        </iron-pages>
+        <div>
+      </div>
+
+  </template>
+
+  <script src="p4-app.js"></script>
+</dom-module>

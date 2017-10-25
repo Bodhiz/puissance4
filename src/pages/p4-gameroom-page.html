@@ -1,0 +1,120 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+
+<link rel="import" href="../components/p4-board.html">
+
+<dom-module id="p4-gameroom-page">
+    <template>
+        <style include="iron-flex iron-flex-alignment">
+            :host {
+                @apply --layout-vertical;
+                @apply --layout-center;
+                --player1-color: var(--paper-amber-400);
+                --player2-color: var(--paper-red-900);
+            }
+
+            paper-dialog>div {
+                padding: 0 15px;
+
+            }
+
+            paper-dialog paper-progress {
+                width: 100%;
+                --paper-progress-indeterminate-cycle-duration: 1.5s;
+                --paper-progress-active-color: var(--paper-blue-900);
+            }
+
+            paper-dialog p {
+                font-weight: bold;
+            }
+
+            p4-board {
+                --p4-board-player1-color: var(--player1-color);
+                --p4-board-player2-color: var(--player2-color);
+            }
+
+            .legend {
+                margin: 15px 0 0 0;
+            }
+
+            .legend>div {
+                margin-right: 15px;
+            }
+
+
+            .legend .coin {
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                margin: 0 5px 0 0;
+
+            }
+
+            .legend .p1 .coin {
+                background: var(--player1-color);
+            }
+
+            .legend .p2 .coin {
+                background: var(--player2-color);
+            }
+
+            .legend .active .coin {
+                border: 2px solid #000;
+            }
+
+            .legend .active .playerName {
+                border-bottom : 3px solid #000;
+            }
+
+            .legend .p2 {
+                margin-right: 0;
+            }
+        </style>
+
+        <app-route route="{{subroute}}" pattern="/:game_id" data="{{_routeData}}">
+        </app-route>
+
+        <firebase-document id="query" path="/gameRooms/[[_gameRoomId]]" data="{{_gameRoom}}">
+        </firebase-document>
+
+        <div class="boardContainer">
+            <p4-board id="board" board="{{_gameRoom.board}}" current-player="{{_gameRoom.currentPlayer}}" on-winner="_handleWinner">
+            </p4-board>
+        </div>
+
+        <div class="layout horizontal legend">
+            <template is="dom-repeat" items="[[_getPlayers(_gameRoom.players)]]" as="playerInList">
+                <div class$="layout horizontal center p[[playerInList.id]] [[_getActiveClass(_gameRoom.currentPlayer, playerInList.id)]]">
+                    <span class="coin"></span>
+                    <span class="playerName">
+                        <template is="dom-if" if="[[_isMe(playerInList.id, player.id)]]">
+                            <strong>Me</strong>
+                        </template>
+                        <template is="dom-if" if="[[!_isMe(playerInList.id, player.id)]]">
+                            [[playerInList.name]]
+                        </template>
+                    </span>
+                </div>
+            </template>
+        </div>
+
+        <paper-dialog id="dialog" auto-fit-on-attach no-cancel-on-outside-click no-cancel-on-esc-key fit-into="[[_fitDialogElementInto]]">
+            <div>
+                <p>[[_dialogMessage]]</p>
+                <template is="dom-if" if="[[!_isGameFinished]]">
+                    <paper-progress indeterminate></paper-progress>
+                </template>
+            </div>
+        </paper-dialog>
+
+    </template>
+    <script src="p4-gameroom-page.js"></script>
+</dom-module>
